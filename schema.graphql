@@ -1,0 +1,493 @@
+# Pool status
+enum LoanStatus {
+  COLLECTION
+  ACTIVE
+  CLOSED
+  CANCELLED
+  DEFAULTED
+  TERMINATED
+}
+
+# Margin call status
+enum MarginCallStatus {
+  REQUESTED
+  ANSWERED
+  LIQUIDATED
+}
+
+# Pool operations
+enum PoolOperations {
+  CREATED
+  COLLATERAL_ADDED
+  LIQUIDITY_SUPPLIED
+  BORROW
+  CLOSE
+  EXTENSION_REPAID
+  GRACE_PENALTY_REPAID
+  INTEREST_REPAID
+  COMPLETE_INTEREST_REPAID
+  PRINCIPLE_REPAID
+  COLLATERAL_WITHDRAWN
+}
+
+# Address linking status
+enum AddressLinkStatus {
+  REQUESTED
+  CANCELLED
+  LINKED
+  MASTER
+}
+
+enum VerifierStatus {
+  VALID
+  INVALID
+}
+
+type VerificationGlobalParam @entity {
+  id: ID!
+  activationDelay: BigInt
+}
+
+type AdminVerifierGlobalParam @entity {
+  id: ID!
+  signValidiy: BigInt
+  singer: String!
+}
+
+type TwitterVerifierGlobalParam @entity {
+  id: ID!
+  signValidiy: BigInt
+  singer: String!
+}
+
+# storing User details
+type UserProfile @entity {
+  id: ID!
+  masterAddress: String!
+  userMetadataPerVerifier: [UserMetadataPerVerifier!]! @derivedFrom(field: "userID")
+  walletAddresses: [walletAddr!]! @derivedFrom(field: "user")
+  # poolsCreated: [Pool!]! @derivedFrom(field: "borrower")
+}
+
+# mapping the verifier with the pools he verified
+type verifier @entity {
+  id: ID!
+  usersVerified: [UserMetadataPerVerifier!]! @derivedFrom(field: "verifiedBy")
+  status: VerifierStatus
+}
+
+type UserMetadataPerVerifier @entity {
+  id: ID! # verifier + userID from profile
+  verifier: String!
+  metadata: String
+  userID: UserProfile!
+  verifiedBy: verifier!
+}
+
+# mapping one user to one or more wallet addresses
+type walletAddr @entity {
+  id: ID!
+  user: UserProfile
+  timestamp: BigInt
+  linkStatus: AddressLinkStatus
+}
+
+type walletLenderCreditLineIndex @entity {
+  id: ID!
+
+  # use walletAddr.ID here
+  wallet: walletAddr
+
+  # use creditLine here
+  creditLine: CreditLine
+}
+
+type walletBorrowreCreditLineIndex @entity {
+  id: ID!
+
+  # use walletAddr.ID here
+  wallet: walletAddr
+
+  # use creditLine here
+  creditLine: CreditLine
+}
+
+type BorrowerProfileAndPoolIndex @entity {
+  id: ID! # borroweraddress + pool
+  pool: Pool
+  wallet: walletAddr
+}
+
+type LenderContirbution @entity {
+  id: ID! # lenderaddress + pool
+  lenderAddress: String!
+  wallet: walletAddr
+  pool: Pool
+  amount: BigInt!
+}
+
+type Pool @entity {
+  id: ID!
+
+  # Basic pool details
+  borrowerAddress: String
+  lenderAddresses: [String!]
+  borrower: BorrowerProfileAndPoolIndex! @derivedFrom(field: "pool")
+  lenders: [LenderContirbution!]! @derivedFrom(field: "pool")
+  loanStartTime: BigInt
+  borrowAsset: String
+  collateralAsset: String
+  borrowRate: BigInt
+  borrowAmountRequested: BigInt
+  collateralShares: BigInt
+  idealCollateralRatio: BigInt
+  poolSavingsStrategy: String
+
+  # repayment details
+  amountBorrowed: BigInt!
+  repaymentProgress: BigInt # noOfRepaymentIntervals * repymentInterval
+  nextPaymentAmount: BigInt
+  nextPaymentDeadline: BigInt # next repayment deadline
+  loanDurationCovered: BigInt
+  loanDuration: BigInt! # expected loan end time
+  # Pool timeline events
+  poolTimeLine: [PoolTimeLine!] @derivedFrom(field: "pool")
+  poolStatus: LoanStatus
+}
+
+type PoolGlobalParam @entity {
+  id: ID!
+  # List of supported borrow tokens
+  supportedBorrowTokens: [String!]!
+  # List of supported collateral tokens
+  supportedCollateralTokens: [String!]!
+  # Collection period
+  collectionPeriod: BigInt!
+  # Loan withdrawal deadline
+  loanWithdrawalDuration: BigInt!
+  # Margin call duration
+  marginCallDuration: BigInt!
+  # Minimum borrow amount requested
+  minBorrowFraction: BigInt!
+  # Liquidation reward fraction
+  liquidatorRewardFraction: BigInt!
+  # Pool cancel Penalty
+  poolCancelPenalty: BigInt!
+  # Protocol fee
+  protocolFeeFraction: BigInt!
+  # Protocol fee collector address
+  protocolFeeCollector: String!
+}
+
+type PoolTimeLine @entity {
+  id: ID!
+  pool: Pool!
+  actor: String
+  timestamp: BigInt
+  poolOperation: PoolOperations
+  amount: BigInt
+}
+
+type CreditLine @entity {
+  #creditLine number
+  id: ID!
+  # credit line time line
+  creditLineTimeline: [CreditLineTimeline!]! @derivedFrom(field: "creditLine")
+
+  # Credit Line Constants
+  lender: String!
+  lenderWalletDetails: walletLenderCreditLineIndex! @derivedFrom(field: "creditLine")
+  borrower: String!
+  borrowerWalletDetails: walletLenderCreditLineIndex! @derivedFrom(field: "creditLine")
+  borrowLimit: BigInt
+  idealCollateralRatio: BigInt
+  borrowRate: BigInt
+  borrowAsset: String!
+  collateralAsset: String!
+  autoLiquidation: Boolean
+  requestByLender: Boolean
+  borrowAssetStrategy: String!
+  collateralAssetStrategy: String!
+
+  # credit line variables
+  status: CreditLineStatus
+  principal: BigInt
+  totalInterestRepaid: BigInt
+  lastPrincipalUpdateTime: BigInt
+  interestAccruedTillLastPrincipalUpdate: BigInt
+  collateralShareInStrategy: BigInt
+  createdAt: BigInt
+}
+
+type CreditLineGlobalParam @entity {
+  # use always 1, to store the global params
+  id: ID!
+  # protocol fee fraction
+  protocolFeeFraction: BigInt
+  # protocol fee collector
+  protocolFeeCollector: String
+  # liquidation reward fraction
+  liquidationRewardFraction: BigInt
+}
+
+type CreditLineTimeline @entity {
+  id: ID!
+  creditLine: CreditLine!
+  timestamp: BigInt
+  creditLineOperation: CreditLineOperations
+  amount: BigInt
+  strategy: String
+  liquidator: String
+}
+
+type UserBalanceCL @entity {
+  id: ID! # User + creditLineId
+  userAddress: String!
+  creditLine: CreditLine!
+  clStatus: CreditLineStatus!
+  principal: BigInt!
+  actorType: ActorType
+  lenderShareBalance: [LenderSharesBalanceCL!]!
+  borrowerShareBalance: [BorrowerSharesBalanceCL!]!
+}
+
+type LenderSharesBalanceCL @entity {
+  id: ID! # User + Token + Strategy
+  token: String!
+  user: String!
+  strategy: String!
+  creditLines: [CreditLine!]!
+  amountLent: BigInt!
+  interestReceived: BigInt!
+}
+
+type BorrowerSharesBalanceCL @entity {
+  id: ID! # User + Token + Strategy
+  token: String!
+  user: String!
+  strategy: String!
+  creditLines: [CreditLine!]!
+  collateralDeposited: BigInt!
+  amountBorrowed: BigInt!
+  amountRepaid: BigInt!
+}
+
+enum ActorType {
+  LENDER
+  BORROWER
+}
+
+enum CreditLineStatus {
+  NOT_CREATED
+  REQUESTED
+  ACTIVE
+  CLOSED
+  CANCELLED
+  LIQUIDATED
+}
+
+enum CreditLineOperations {
+  NOT_CREATED
+  REQUESTED
+  ACTIVE
+  DEPOSIT_COLLATERAL
+  BORROW
+  REPAY
+  WITHDRAW_COLLATERAL
+  CLOSED
+  CANCELLED
+  RESET
+  LIQUIDATED
+}
+
+type StrategyRegistry @entity {
+  id: ID!
+  max: BigInt!
+  strategyOrder: [Strategy!]
+}
+
+type Strategy @entity {
+  id: ID!
+  address: String!
+  enabled: Boolean!
+}
+
+type UserBalance @entity {
+  id: ID!
+  strategyBalance: [Balance!]!
+  user: String!
+  token: String!
+}
+
+type Balance @entity {
+  id: ID!
+  user: String!
+  strategy: Strategy!
+  token: String!
+  shares: BigInt!
+}
+
+type Allowance @entity {
+  id: ID!
+  from: String!
+  to: String!
+  token: String!
+  amount: BigInt!
+}
+
+# Pooled Credit Lines
+
+enum PooledCreditLineStatus {
+  NOT_CREATED
+  REQUESTED
+  ACTIVE
+  CLOSED
+  CANCELLED
+  LIQUIDATED
+  EXPIRED
+  TERMINATED
+}
+
+enum PooledCreditLineEvent {
+  NOT_CREATED
+  REQUESTED
+  ACTIVE
+  DEPOSIT_COLLATERAL
+  BORROW
+  REPAY
+  WITHDRAW_COLLATERAL
+  CLOSED
+  CANCELLED
+  RESET
+  EXPIRED
+  TERMINATED
+  LIQUIDATED
+  LEND
+  WITHDRAW_INTEREST
+  WITHDRAW_LIQUIDATY
+  WITHDRAW_COLLATERAL_LIQUIDITY
+}
+
+type PooledCreditLine @entity {
+  id: ID!
+
+  # Pooled credit line time line
+  pooledCreditLineTimeline: [PooledCreditLineTimeLine!] @derivedFrom(field: "pooledCreditLine")
+
+  # Pooled credit lime constants
+  lenderPool: LenderPool @derivedFrom(field: "pooledCreditLine")
+  borrowerAddress: String!
+  borrower: UserProfile
+  borrowerVerifier: verifier!
+  lenderVerifier: verifier!
+  borrowLimit: BigInt
+  borrowRate: BigInt
+  minBorrowAmount: BigInt
+  idealCollateralRatio: BigInt
+  borrowAsset: String!
+  collateralAsset: String!
+  createdAt: BigInt
+  startsAt: BigInt
+  endsAt: BigInt
+  defaultsAt: BigInt
+  lenderStrategy: String!
+  collateralStrategy: String!
+  gracePenaltyRate: BigInt
+
+  # Pooled credit line variables
+  status: PooledCreditLineStatus!
+  principal: BigInt
+  totalInterestRepaid: BigInt
+  lastPrincipalUpdateTime: BigInt
+  interestAccruedTillLastPrincipalUpdate: BigInt
+  depositedCollateralInShares: BigInt
+
+  totalLentAmount: BigInt!
+}
+
+type PooledCreditLineGlobalVariables @entity {
+  # use always 1, to store the global params
+  id: ID!
+  # protocol fee fraction
+  protocolFeeFraction: BigInt
+  # protocol fee collector
+  protocolFeeCollector: String
+}
+
+type LenderPool @entity {
+  id: ID!
+  pooledCreditLine: PooledCreditLine!
+  lender: [LenderPerLenderPool!] @derivedFrom(field: "lenderPool")
+  startTime: BigInt
+  borrowAsset: String
+  collateralAsset: String
+  borrowLimit: BigInt
+  minBorrowAmount: BigInt
+  verifier: verifier!
+  borrowAssetStrategy: String
+  sharesHeld: BigInt
+  borrowerInterestShares: BigInt
+  borrowerInterestSharesWithdrawn: BigInt
+  yieldInterestWithdrawnShares: BigInt
+  collateralHeld: BigInt
+  areTokensTransferable: Boolean
+}
+
+type LenderPerLenderPool @entity {
+  id: ID! # LenderPool + LenderAddress
+  lender: UserProfile!
+  lenderPool: LenderPool!
+  lenderAddress: String
+  lenderBalance: BigInt!
+  amountLent: BigInt!
+  amountWithdrawn: BigInt!
+  collateralAmountWithdrawn: BigInt!
+  sharesWithdrawn: BigInt!
+  interestWithdrawn: BigInt!
+  borrowerInterestSharesWithdrawn: BigInt
+  yieldInterestWithdrawnShares: BigInt
+  strategy: String
+}
+
+type PooledCreditLineTimeLine @entity {
+  id: ID!
+  pooledCreditLine: PooledCreditLine!
+  timestamp: BigInt
+  pooledCreditLineOperation: PooledCreditLineEvent
+  amount: BigInt
+  strategy: String
+}
+
+type UserBalancePCL @entity {
+  id: ID! # User + creditLineId
+  userProfile: UserProfile!
+  pooledCreditLine: PooledCreditLine!
+  pclStatus: PooledCreditLineStatus!
+  principal: BigInt!
+  actorType: ActorType
+  lenderShareBalance: [LenderSharesBalancePCL!]!
+  borrowerShareBalance: [BorrowerSharesBalancePCL!]!
+}
+
+type LenderSharesBalancePCL @entity {
+  id: ID! # User + Token + Strategy
+  token: String!
+  user: String!
+  strategy: String!
+  pooledCreditLines: [PooledCreditLine!]!
+  amountLent: BigInt!
+  amountWithdrawn: BigInt!
+  sharesWithdrawn: BigInt!
+  interestWithdrawn: BigInt!
+}
+
+type BorrowerSharesBalancePCL @entity {
+  id: ID! # User + Token + Strategy
+  token: String!
+  user: String!
+  strategy: String!
+  pooledCreditLines: [PooledCreditLine!]!
+  collateralDeposited: BigInt!
+  amountBorrowed: BigInt!
+  amountRepaid: BigInt!
+}

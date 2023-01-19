@@ -1,0 +1,17 @@
+name: Compilation test
+
+on: [push]
+
+jobs:
+  build:
+    name: Build subgraph
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://node:12.22.5
+      - name: Install dependencies
+        run: npm install --save-dev
+      - name: Build schema
+        run: npm run codegen
+      - name: Build subgraph code
+        run: npm run build

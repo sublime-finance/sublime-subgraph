@@ -1,0 +1,478 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_priceOracle", "type": "address" },
+      { "internalType": "address", "name": "_savingsAccount", "type": "address" },
+      { "internalType": "address", "name": "_repaymentImpl", "type": "address" },
+      { "internalType": "address", "name": "_poolFactory", "type": "address" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "protocolFee", "type": "uint256" }
+    ],
+    "name": "AmountBorrowed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "spender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "borrower", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "sharesReceived", "type": "uint256" }
+    ],
+    "name": "CollateralAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "borrower", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "CollateralWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "liquidator", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "lender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "_tokenReceived", "type": "uint256" }
+    ],
+    "name": "LenderLiquidated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "amountSupplied", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "lenderAddress", "type": "address" }
+    ],
+    "name": "LiquiditySupplied",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "lenderAddress", "type": "address" }
+    ],
+    "name": "LiquidityWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "borrower", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "lender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "sharesReceived", "type": "uint256" }
+    ],
+    "name": "MarginCallCollateralAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "lenderAddress", "type": "address" }],
+    "name": "MarginCalled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }],
+    "name": "Paused",
+    "type": "event"
+  },
+  { "anonymous": false, "inputs": [], "name": "PoolCancelled", "type": "event" },
+  { "anonymous": false, "inputs": [], "name": "PoolClosed", "type": "event" },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "liquidator", "type": "address" }],
+    "name": "PoolLiquidated",
+    "type": "event"
+  },
+  { "anonymous": false, "inputs": [], "name": "PoolTerminated", "type": "event" },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lender", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      { "internalType": "bool", "name": "_transferFromSavingsAccount", "type": "bool" }
+    ],
+    "name": "addCollateralInMarginCall",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "address", "name": "spender", "type": "address" }
+    ],
+    "name": "allowance",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "approve",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+    "name": "balanceOf",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "borrower",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_balance", "type": "uint256" },
+      { "internalType": "uint256", "name": "_liquidityShares", "type": "uint256" }
+    ],
+    "name": "calculateCollateralRatio",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "calculateCurrentPeriod",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_lender", "type": "address" }],
+    "name": "calculateRepaymentWithdrawable",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "cancelPool", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  { "inputs": [], "name": "closeLoan", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_totalCollateralTokens", "type": "uint256" },
+      { "internalType": "uint256", "name": "_fraction", "type": "uint256" }
+    ],
+    "name": "correspondingBorrowTokens",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "subtractedValue", "type": "uint256" }
+    ],
+    "name": "decreaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      { "internalType": "bool", "name": "_transferFromSavingsAccount", "type": "bool" }
+    ],
+    "name": "depositCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_lender", "type": "address" }],
+    "name": "getBalanceDetails",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_lender", "type": "address" }],
+    "name": "getCurrentCollateralRatio",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCurrentCollateralRatio",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_source", "type": "address" },
+      { "internalType": "address", "name": "_target", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "getEquivalentTokens",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLoanStatus",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_lender", "type": "address" }],
+    "name": "getMarginCallEndTime",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "addedValue", "type": "uint256" }
+    ],
+    "name": "increaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_borrowAmountRequested", "type": "uint256" },
+      { "internalType": "uint256", "name": "_borrowRate", "type": "uint256" },
+      { "internalType": "address", "name": "_borrower", "type": "address" },
+      { "internalType": "address", "name": "_borrowAsset", "type": "address" },
+      { "internalType": "address", "name": "_collateralAsset", "type": "address" },
+      { "internalType": "uint256", "name": "_idealCollateralRatio", "type": "uint256" },
+      { "internalType": "uint64", "name": "_repaymentInterval", "type": "uint64" },
+      { "internalType": "uint64", "name": "_noOfRepaymentIntervals", "type": "uint64" },
+      { "internalType": "address", "name": "_poolSavingsStrategy", "type": "address" },
+      { "internalType": "uint256", "name": "_collateralAmount", "type": "uint256" },
+      { "internalType": "bool", "name": "_transferFromSavingsAccount", "type": "bool" },
+      { "internalType": "address", "name": "_lenderVerifier", "type": "address" },
+      { "internalType": "uint256", "name": "_loanWithdrawalDuration", "type": "uint256" },
+      { "internalType": "uint256", "name": "_collectionPeriod", "type": "uint256" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_balance", "type": "uint256" }],
+    "name": "interestPerPeriod",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_principal", "type": "uint256" }],
+    "name": "interestPerSecond",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "interestToPay",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lender", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      { "internalType": "address", "name": "_strategy", "type": "address" },
+      { "internalType": "bool", "name": "_fromSavingsAccount", "type": "bool" }
+    ],
+    "name": "lend",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "lenders",
+    "outputs": [
+      { "internalType": "uint256", "name": "marginCallEndTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "effectiveInterestWithdrawn", "type": "uint256" },
+      { "internalType": "uint256", "name": "extraLiquidityShares", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bool", "name": "_toSavingsAccount", "type": "bool" },
+      { "internalType": "bool", "name": "_receiveLiquidityShare", "type": "bool" }
+    ],
+    "name": "liquidateCancelPenalty",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lender", "type": "address" },
+      { "internalType": "bool", "name": "_fromSavingsAccount", "type": "bool" },
+      { "internalType": "bool", "name": "_toSavingsAccount", "type": "bool" },
+      { "internalType": "bool", "name": "_recieveLiquidityShare", "type": "bool" }
+    ],
+    "name": "liquidateForLender",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bool", "name": "_fromSavingsAccount", "type": "bool" },
+      { "internalType": "bool", "name": "_toSavingsAccount", "type": "bool" },
+      { "internalType": "bool", "name": "_recieveLiquidityShare", "type": "bool" }
+    ],
+    "name": "liquidatePool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "name",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "poolConstants",
+    "outputs": [
+      { "internalType": "uint64", "name": "loanStartTime", "type": "uint64" },
+      { "internalType": "uint64", "name": "loanWithdrawalDeadline", "type": "uint64" },
+      { "internalType": "uint64", "name": "noOfRepaymentIntervals", "type": "uint64" },
+      { "internalType": "uint64", "name": "repaymentInterval", "type": "uint64" },
+      { "internalType": "address", "name": "borrower", "type": "address" },
+      { "internalType": "address", "name": "collateralAsset", "type": "address" },
+      { "internalType": "address", "name": "borrowAsset", "type": "address" },
+      { "internalType": "address", "name": "poolSavingsStrategy", "type": "address" },
+      { "internalType": "address", "name": "lenderVerifier", "type": "address" },
+      { "internalType": "uint256", "name": "borrowRate", "type": "uint256" },
+      { "internalType": "uint256", "name": "idealCollateralRatio", "type": "uint256" },
+      { "internalType": "uint256", "name": "borrowAmountRequested", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "poolVariables",
+    "outputs": [
+      { "internalType": "enum IPool.LoanStatus", "name": "loanStatus", "type": "uint8" },
+      { "internalType": "uint256", "name": "baseLiquidityShares", "type": "uint256" },
+      { "internalType": "uint256", "name": "extraLiquidityShares", "type": "uint256" },
+      { "internalType": "uint256", "name": "penaltyLiquidityAmount", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "requestMarginCall", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "terminatePool", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transfer",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "sender", "type": "address" },
+      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transferFrom",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  { "inputs": [], "name": "withdrawBorrowedAmount", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  { "inputs": [], "name": "withdrawLiquidity", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  { "inputs": [], "name": "withdrawRepayment", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+]

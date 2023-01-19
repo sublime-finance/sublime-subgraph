@@ -1,0 +1,471 @@
+specVersion: 0.0.2
+description: Sublime Finance Subgraph
+repository: https://github.com/sublime-finance/sublime-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CreditLine
+    network: rinkeby
+    source:
+      address: "0x13516c7E06A60d73bf6e0cC9D19B34B1D6d5f3D7"
+      abi: CreditLine
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/CreditLine.ts
+      entities:
+        - CreditLine
+        - CreditLineGlobalParam
+      abis:
+        - name: CreditLine
+          file: ./abis/CreditLine.json
+      eventHandlers:
+        - event: BorrowedFromCreditLine(indexed uint256,uint256)
+          handler: handleBorrowedFromCreditLine
+        - event: BorrowLimitUpdated(indexed uint256,uint128)
+          handler: handleBorrowLimitUpdated
+        - event: CompleteCreditLineRepaid(indexed uint256,indexed address,uint256)
+          handler: handleCompleteCreditLineRepaid
+        # - event: LimitsUpdated(indexed string,uint256,uint256)
+        #   handler: handleLimitsUpdated
+        - event: CreditLineAccepted(indexed uint256)
+          handler: handleCreditLineAccepted
+        - event: CreditLineClosed(indexed uint256,bool)
+          handler: handleCreditLineClosed
+        - event: CreditLineCancelled(indexed uint256)
+          handler: handleCreditLineCancelled
+        - event: CreditLineLiquidated(indexed uint256,indexed address)
+          handler: handleCreditLineLiquidated
+        - event: CreditLineRequested(indexed uint256,indexed address,indexed address,bool)
+          handler: handleCreditLineRequested
+        - event: CreditLineReset(indexed uint256)
+          handler: handleCreditLineReset
+        - event: LiquidationRewardFractionUpdated(uint256)
+          handler: handleLiquidationRewardFractionUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: PartialCreditLineRepaid(indexed uint256,indexed address,uint256)
+          handler: handlePartialCreditLineRepaid
+        - event: ProtocolFeeCollectorUpdated(indexed address)
+          handler: handleProtocolFeeCollectorUpdated
+        - event: ProtocolFeeFractionUpdated(uint256)
+          handler: handleProtocolFeeFractionUpdated
+        - event: CollateralDeposited(indexed uint256,uint256,indexed address)
+          handler: handleCollateralDeposited
+        - event: CollateralWithdrawn(indexed uint256,uint256)
+          handler: handleCollateralWithdrawn
+  - kind: ethereum/contract
+    name: StrategyRegistry
+    network: rinkeby
+    source:
+      address: "0x704Fa149C8fB31C03E8bA9357eb1F77B6a54B47e"
+      abi: StrategyRegistry
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/strategyRegistry/strategyRegistry.ts
+      entities:
+        - StrategyRegistry
+        - Strategy
+      abis:
+        - name: StrategyRegistry
+          file: ./abis/StrategyRegistry.json
+      eventHandlers:
+        - event: StrategyAdded(indexed address)
+          handler: handleStrategyAdded
+        - event: StrategyRemoved(indexed address)
+          handler: handleStrategyRemoved
+        - event: MaxStrategiesUpdated(uint256)
+          handler: handleMaxStrategiesUpdated
+  - kind: ethereum/contract
+    name: SavingsAccount
+    network: rinkeby
+    source:
+      address: "0xFb55f12D51619F15370E3e8983D22a71dBAca379"
+      abi: SavingsAccount
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/savingsAccount/savingsAccount.ts
+      entities:
+        - SavingsAccount
+        - Balance
+        - BalancePerStrategy
+        - Allowance
+        - AllowancePerAddress
+      abis:
+        - name: SavingsAccount
+          file: ./abis/SavingsAccount.json
+      eventHandlers:
+        - event: Approved(indexed address,indexed address,indexed address,uint256)
+          handler: handleApproval
+        # - event: Burned(indexed address,address,indexed address,uint256)
+        #   handler: handleBurned
+        - event: Deposited(indexed address,uint256,indexed address,indexed address)
+          handler: handleDeposit
+        - event: StrategyRegistryUpdated(indexed address)
+          handler: handleStrategyRegistryUpdate
+        - event: StrategySwitched(indexed address,indexed address,uint256,uint256,address,indexed address)
+          handler: handleStrategySwitched
+        - event: Transfer(indexed address,address,indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: TransferShares(indexed address,address,indexed address,indexed address,uint256)
+          handler: handleTransferShares
+        - event: Withdrawn(indexed address,indexed address,uint256,indexed address,address,bool)
+          handler: handleWithdraw
+        - event: WithdrawnAll(indexed address,uint256,indexed address)
+          handler: handleWithdrawAll
+  - kind: ethereum/contract
+    name: Verification
+    network: rinkeby
+    source:
+      address: "0x675eA503CEB9438406b782054c466204CFF7c22e"
+      abi: Verification
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/verification/Verification.ts
+      entities:
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddress
+      abis:
+        - name: Verification
+          file: ./abis/Verification.json
+      eventHandlers:
+        - event: AddressLinked(indexed address,indexed address,uint256)
+          handler: handleAddressLinked
+        - event: AddressUnlinked(indexed address,indexed address)
+          handler: handleAddressUnlinked
+        - event: UserRegistered(indexed address,indexed address,uint256)
+          handler: handleUserRegistered
+        - event: UserUnregistered(indexed address,indexed address,indexed address)
+          handler: handleUserUnregistered
+        - event: VerifierAdded(indexed address)
+          handler: handleVerifierAdded
+        - event: VerifierRemoved(indexed address)
+          handler: handleVerifierRemoved
+  - kind: ethereum/contract
+    name: twitterVerifier
+    network: rinkeby
+    source:
+      address: "0xB980BDa08dB45156E5fE727057f54f85AfB6eE3C"
+      abi: twitterVerifier
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/verification/twitterVerifier.ts
+      entities:
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddress
+      abis:
+        - name: twitterVerifier
+          file: ./abis/twitterVerifier.json
+      eventHandlers:
+        - event: UserRegistered(indexed address,bool,indexed string)
+          handler: handleUserRegisteredByTwitter
+        - event: UserUnregistered(indexed address)
+          handler: handleUserUnregisteredByTwitter
+        - event: SignValidityUpdated(uint256)
+          handler: handleSignValidityUpdated
+        - event: SignerUpdated(indexed address)
+          handler: handleSignerUpdated
+  - kind: ethereum/contract
+    name: adminVerifier
+    network: rinkeby
+    source:
+      address: "0x6469d5A63e28E2fa8cC37969e0817cf7e2F6F50b"
+      abi: adminVerifier
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/verification/adminVerifier.ts
+      entities:
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddress
+      abis:
+        - name: adminVerifier
+          file: ./abis/adminVerifier.json
+      eventHandlers:
+        - event: UserRegistered(indexed address,bool,indexed string)
+          handler: handleUserRegisteredByAdmin
+        - event: UserUnregistered(indexed address)
+          handler: handleUserUnregisteredByAdmin
+        - event: SignValidityUpdated(uint256)
+          handler: handleSignValidityUpdated
+        - event: SignerUpdated(indexed address)
+          handler: handleSignerUpdated
+  - kind: ethereum/contract
+    name: Repayments
+    network: rinkeby
+    source:
+      address: "0x0000000000000000000000000000000000000000"
+      abi: Repayments
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: src/pools/repayments.ts
+      entities:
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddress
+      abis:
+        - name: Repayments
+          file: ./abis/Repayments.json
+      eventHandlers:
+        # - event: ExtensionRepaid(indexed address,uint256)
+        #   handler: handleExtensionRepaid
+        - event: GracePenaltyRateUpdated(indexed uint256)
+          handler: handleGracePenaltyRateUpdated
+        - event: GracePenaltyRepaid(indexed address,uint256)
+          handler: handleGracePenaltyRepaid
+        - event: GracePeriodFractionUpdated(indexed uint256)
+          handler: handleGracePeriodFractionUpdated
+        - event: InterestRepaid(indexed address,uint256)
+          handler: handleInterestRepaid
+        - event: InterestRepaymentComplete(indexed address,uint256)
+          handler: handleInterestRepaymentComplete
+        - event: PoolFactoryUpdated(indexed address)
+          handler: handlePoolFactoryUpdated
+        - event: PrincipalRepaid(indexed address,uint256)
+          handler: handlePrincipalRepaid
+  - kind: ethereum/contract
+    name: PoolFactory
+    network: rinkeby
+    source:
+      address: "0x0000000000000000000000000000000000000000"
+      abi: PoolFactory
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyScript
+      file: ./src/poolFactory/poolFactory.ts
+      entities:
+        - pool
+        - poolTimeLine
+        - lender
+        - lenderPerPool
+        - borrower
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddr
+      abis:
+        - name: PoolFactory
+          file: ./abis/PoolFactory.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address)
+          handler: handlePoolCreated
+        - event: BorrowTokenUpdated(indexed address,bool)
+          handler: handleBorrowTokenUpdated
+        - event: CollateralTokenUpdated(indexed address,bool)
+          handler: handleCollateralTokenUpdated
+        - event: CollectionPeriodUpdated(uint256)
+          handler: handleCollectionPeriodUpdated
+        # - event: ExtensionImplUpdated(indexed address)
+        #   handler: handleExtensionImplUpdated
+        - event: LimitsUpdated(indexed string,uint256,uint256)
+          handler: handleLimitsUpdated
+        - event: LiquidatorRewardFractionUpdated(uint256)
+          handler: handleLiquidatorRewardFractionUpdated
+        - event: LoanWithdrawalDurationUpdated(uint256)
+          handler: handleLoanWithdrawalDurationUpdated
+        - event: MarginCallDurationUpdated(uint256)
+          handler: handleMarginCallDurationUpdated
+        - event: MinBorrowFractionUpdated(uint256)
+          handler: handleMinBorrowFractionUpdated
+        - event: NoStrategyUpdated(address)
+          handler: handleNoStrategyUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: PoolCancelPenaltyMultipleUpdated(uint256)
+          handler: handlePoolCancelPenaltyMultipleUpdated
+        - event: PoolInitSelectorUpdated(bytes4)
+          handler: handlePoolInitSelectorUpdated
+        - event: PoolLogicUpdated(indexed address)
+          handler: handlePoolLogicUpdated
+        - event: PriceOracleUpdated(indexed address)
+          handler: handlePriceOracleUpdated
+        - event: ProtocolFeeCollectorUpdated(address)
+          handler: handleProtocolFeeCollectorUpdated
+        - event: ProtocolFeeFractionUpdated(uint256)
+          handler: handleProtocolFeeFractionUpdated
+        - event: RepaymentImplUpdated(indexed address)
+          handler: handleRepaymentImplUpdated
+        - event: SavingsAccountUpdated(indexed address)
+          handler: handleSavingsAccountUpdated
+        - event: StrategyRegistryUpdated(indexed address)
+          handler: handleStrategyRegistryUpdated
+        - event: UserRegistryUpdated(indexed address)
+          handler: handleUserRegistryUpdated
+  - kind: ethereum/contract
+    name: PooledCreditLine
+    network: rinkeby
+    source:
+      address: "0x785C366f4B6EffE53DeC9f5bC48935fC7B4E1bb9"
+      abi: PooledCreditLine
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyScript
+      file: ./src/PooledCreditLine/PooledCreditLine.ts
+      entities:
+        - PooledCreditLine
+      abis:
+        - name: PooledCreditLine
+          file: ./abis/PooledCreditLine.json
+        - name: LenderPool
+          file: ./abis/LenderPool.json
+      eventHandlers:
+        - event: BorrowedFromPooledCreditLine(indexed uint256,uint256)
+          handler: handleBorrowedFromPooledCreditLine
+        - event: CollateralDeposited(indexed uint256,uint256,indexed address)
+          handler: handleCollateralDeposited
+        - event: CollateralWithdrawn(indexed uint256,uint256)
+          handler: handleCollateralWithdrawn
+        - event: CompletePooledCreditLineRepaid(indexed uint256,indexed address,uint256)
+          handler: handleCompletePooledCreditLineRepaid
+        - event: PooledCreditLineAccepted(indexed uint256,uint256)
+          handler: handlePooledCreditLineAccepted
+        - event: PooledCreditLineClosed(indexed uint256)
+          handler: handlePooledCreditLineClosed
+        - event: PooledCreditLineCancelled(indexed uint256,indexed string)
+          handler: handlePooledCreditLineCancelled
+        - event: PooledCreditLineLiquidated(indexed uint256)
+          handler: handlePooledCreditLineLiquidated
+        - event: PooledCreditLineRequested(indexed uint256,indexed address,indexed address)
+          handler: handlePooledCreditLineRequested
+        - event: PooledCreditLineTerminated(indexed uint256)
+          handler: handlePooledCreditLineTerminated
+        # - event: LimitsUpdated(indexed string,uint256,uint256)
+        #   handler: handleLimitsUpdated
+        - event: PartialPooledCreditLineRepaid(indexed uint256,indexed address,uint256)
+          handler: handlePartialPooledCreditLineRepaid
+        - event: ProtocolFeeCollectorUpdated(indexed address)
+          handler: handleProtocolFeeCollectorUpdated
+        - event: ProtocolFeeFractionUpdated(uint256)
+          handler: handleProtocolFeeFractionUpdated
+  - kind: ethereum/contract
+    name: LenderPool
+    network: rinkeby
+    source:
+      address: "0xD29a12da9140226dea8286EB05DC22a6bB0593f9"
+      abi: LenderPool
+      startBlock: 10700000
+    mapping:
+      kind: ethereum/eventHandlers
+      apiVersion: 0.0.5
+      language: wasm/assemblyScript
+      file: ./src/LenderPool/LenderPool.ts
+      entities:
+        - PooledCreditLine
+        - LenderPool
+        - LenderPerLenderPool
+      abis:
+        - name: LenderPool
+          file: ./abis/LenderPool.json
+        - name: PooledCreditLine
+          file: ./abis/PooledCreditLine.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: InterestWithdrawn(indexed uint256,indexed address,uint256)
+          handler: handleInterestWithdrawn
+        - event: Lend(indexed uint256,indexed address,uint256)
+          handler: handleLend
+        - event: Liquidated(indexed uint256,uint256)
+          handler: handleLiquidated
+        - event: LiquidationWithdrawn(indexed uint256,indexed address,uint256)
+          handler: handleLiquidationWithdrawn
+        - event: LiquidityWithdrawn(uint256,indexed address)
+          handler: handleLiquidityWithdrawn
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+        - event: WithdrawLiquidity(indexed uint256,indexed address,uint256)
+          handler: handleWithdrawLiquidity
+        - event: WithdrawLiquidityOnCancel(indexed uint256,indexed address,uint256)
+          handler: handleWithdrawLiquidityOnCancel
+templates:
+  - name: Pools
+    kind: ethereum/contract
+    network: rinkeby
+    source:
+      abi: Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/pools/pools.ts
+      entities:
+        - pool
+        - poolTimeLine
+        - lender
+        - lenderPerPool
+        - borrower
+        - UserProfile
+        - verifier
+        - UserMetadataPerVerifier
+        - walletAddr
+      abis:
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: AmountBorrowed(uint256,uint256)
+          handler: handleAmountBorrowed
+        - event: CollateralAdded(indexed address,uint256,uint256)
+          handler: handleCollateralAdded
+        - event: CollateralWithdrawn(indexed address,uint256)
+          handler: handleCollateralWithdrawn
+        - event: LenderLiquidated(indexed address,indexed address,uint256)
+          handler: handleLenderLiquidated
+        - event: LiquiditySupplied(uint256,indexed address)
+          handler: handleLiquiditySupplied
+        - event: LiquidityWithdrawn(uint256,indexed address)
+          handler: handleLiquidityWithdrawn
+        - event: MarginCallCollateralAdded(indexed address,indexed address,uint256,uint256)
+          handler: handleMarginCallCollateralAdded
+        - event: MarginCalled(indexed address)
+          handler: handleMarginCalled
+        - event: Paused(address)
+          handler: handlePaused
+        - event: PoolCancelled()
+          handler: handlePoolCancelled
+        - event: PoolClosed()
+          handler: handlePoolClosed
+        - event: PoolLiquidated(indexed address)
+          handler: handlePoolLiquidated
+        - event: PoolTerminated()
+          handler: handlePoolTerminated
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Unpaused(address)
+          handler: handleUnpaused

@@ -1,0 +1,161 @@
+[
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_chainlinkHeartbeat", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "token", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "priceOracle", "type": "address" }
+    ],
+    "name": "ChainlinkFeedUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "token1", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "token2", "type": "address" },
+      { "indexed": false, "internalType": "bytes32", "name": "feedId", "type": "bytes32" },
+      { "indexed": true, "internalType": "address", "name": "pool", "type": "address" }
+    ],
+    "name": "UniswapFeedUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint32", "name": "uniswapPriceAveragingPeriod", "type": "uint32" }],
+    "name": "UniswapPriceAveragingPeriodUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "chainlinkFeedAddresses",
+    "outputs": [
+      { "internalType": "address", "name": "oracle", "type": "address" },
+      { "internalType": "uint8", "name": "decimals", "type": "uint8" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token1", "type": "address" },
+      { "internalType": "address", "name": "token2", "type": "address" }
+    ],
+    "name": "doesFeedExist",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "num", "type": "address" },
+      { "internalType": "address", "name": "den", "type": "address" }
+    ],
+    "name": "getChainlinkLatestPrice",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "num", "type": "address" },
+      { "internalType": "address", "name": "den", "type": "address" }
+    ],
+    "name": "getLatestPrice",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "num", "type": "address" },
+      { "internalType": "address", "name": "den", "type": "address" }
+    ],
+    "name": "getUniswapLatestPrice",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_admin", "type": "address" },
+      { "internalType": "uint32", "name": "_uniswapPriceAveragingPeriod", "type": "uint32" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "address", "name": "priceOracle", "type": "address" }
+    ],
+    "name": "setChainlinkFeedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token1", "type": "address" },
+      { "internalType": "address", "name": "token2", "type": "address" },
+      { "internalType": "address", "name": "pool", "type": "address" }
+    ],
+    "name": "setUniswapFeedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint32", "name": "_uniswapPriceAveragingPeriod", "type": "uint32" }],
+    "name": "setUniswapPriceAveragingPeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "uniswapPools",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

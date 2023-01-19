@@ -1,0 +1,161 @@
+[
+  {
+    "inputs": [{ "internalType": "address", "name": "_verification", "type": "address" }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "signValidity", "type": "uint256" }],
+    "name": "SignValidityUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "signerAddress", "type": "address" }],
+    "name": "SignerUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+      { "indexed": false, "internalType": "bool", "name": "isMasterLinked", "type": "bool" },
+      { "indexed": true, "internalType": "string", "name": "metadata", "type": "string" }
+    ],
+    "name": "UserRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "user", "type": "address" }],
+    "name": "UserUnregistered",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "VERIFICATION",
+    "outputs": [{ "internalType": "contract IVerification", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "_hash", "type": "bytes32" }],
+    "name": "blackListDigest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_admin", "type": "address" },
+      { "internalType": "address", "name": "_signerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_signValidity", "type": "uint256" },
+      { "internalType": "string", "name": "_name", "type": "string" },
+      { "internalType": "string", "name": "_version", "type": "string" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bool", "name": "_isMasterLinked", "type": "bool" },
+      { "internalType": "uint8", "name": "_v", "type": "uint8" },
+      { "internalType": "bytes32", "name": "_r", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "_s", "type": "bytes32" },
+      { "internalType": "string", "name": "_twitterId", "type": "string" },
+      { "internalType": "string", "name": "_tweetId", "type": "string" },
+      { "internalType": "uint256", "name": "_timestamp", "type": "uint256" }
+    ],
+    "name": "registerSelf",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "signValidity",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "signerAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "name": "twitterIdMap",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "unregisterSelf", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [{ "internalType": "address", "name": "_user", "type": "address" }],
+    "name": "unregisterUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_signValidity", "type": "uint256" }],
+    "name": "updateSignValidity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_signerAddress", "type": "address" }],
+    "name": "updateSignerAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "name": "usedTweetIds",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "userData",
+    "outputs": [
+      { "internalType": "string", "name": "twitterId", "type": "string" },
+      { "internalType": "string", "name": "tweetId", "type": "string" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

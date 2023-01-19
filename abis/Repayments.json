@@ -1,0 +1,265 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "uint256", "name": "gracePenaltyRate", "type": "uint256" }],
+    "name": "GracePenaltyRateUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "poolID", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "repayAmount", "type": "uint256" }
+    ],
+    "name": "GracePenaltyRepaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "uint256", "name": "gracePeriodFraction", "type": "uint256" }],
+    "name": "GracePeriodFractionUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "poolID", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "repayAmount", "type": "uint256" }
+    ],
+    "name": "InterestRepaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "poolID", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "repayAmount", "type": "uint256" }
+    ],
+    "name": "InterestRepaymentComplete",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "poolFactory", "type": "address" }],
+    "name": "PoolFactoryUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "poolID", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "repayAmount", "type": "uint256" }
+    ],
+    "name": "PrincipalRepaid",
+    "type": "event"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "didBorrowerDefault",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getCurrentInstalmentInterval",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getCurrentLoanInterval",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGracePeriodFraction",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getInstalmentsCompleted",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_poolID", "type": "address" },
+      { "internalType": "uint256", "name": "_scaledUpTime", "type": "uint256" }
+    ],
+    "name": "getInterest",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getInterestCalculationVars",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getInterestDueTillInstalmentDeadline",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getInterestLeft",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getInterestPerSecond",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getNextInstalmentDeadline",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_poolID", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "getRepaidDuration",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "getTotalRepaidAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gracePenaltyRate",
+    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gracePeriodFraction",
+    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_poolFactory", "type": "address" },
+      { "internalType": "uint128", "name": "_gracePenaltyRate", "type": "uint128" },
+      { "internalType": "uint128", "name": "_gracePeriodFraction", "type": "uint128" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "numberOfTotalRepayments", "type": "uint64" },
+      { "internalType": "uint256", "name": "repaymentInterval", "type": "uint256" },
+      { "internalType": "uint256", "name": "borrowRate", "type": "uint256" },
+      { "internalType": "uint256", "name": "loanStartTime", "type": "uint256" },
+      { "internalType": "address", "name": "lentAsset", "type": "address" }
+    ],
+    "name": "initializeRepayment",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "isGracePenaltyApplicable",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_poolID", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "repay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "repayConstants",
+    "outputs": [
+      { "internalType": "uint64", "name": "numberOfTotalRepayments", "type": "uint64" },
+      { "internalType": "address", "name": "repayAsset", "type": "address" },
+      { "internalType": "uint128", "name": "gracePenaltyRate", "type": "uint128" },
+      { "internalType": "uint128", "name": "gracePeriodFraction", "type": "uint128" },
+      { "internalType": "uint256", "name": "borrowRate", "type": "uint256" },
+      { "internalType": "uint256", "name": "repaymentInterval", "type": "uint256" },
+      { "internalType": "uint256", "name": "loanDuration", "type": "uint256" },
+      { "internalType": "uint256", "name": "loanStartTime", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolID", "type": "address" }],
+    "name": "repayPrincipal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "repayVariables",
+    "outputs": [
+      { "internalType": "uint256", "name": "repaidAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "loanDurationCovered", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint128", "name": "_gracePenaltyRate", "type": "uint128" }],
+    "name": "updateGracePenaltyRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint128", "name": "_gracePeriodFraction", "type": "uint128" }],
+    "name": "updateGracePeriodFraction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_poolFactory", "type": "address" }],
+    "name": "updatePoolFactory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

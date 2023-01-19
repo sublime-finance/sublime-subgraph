@@ -1,0 +1,234 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "activationDelay", "type": "uint256" }],
+    "name": "ActivationDelayUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "linkedAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "activatesAt", "type": "uint256" }
+    ],
+    "name": "AddressLinked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "linkedAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" }
+    ],
+    "name": "AddressLinkingRequestCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "linkedAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" }
+    ],
+    "name": "AddressLinkingRequested",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "linkedAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" }
+    ],
+    "name": "AddressUnlinked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "verifier", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "activatesAt", "type": "uint256" }
+    ],
+    "name": "UserRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "masterAddress", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "verifier", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "unregisteredBy", "type": "address" }
+    ],
+    "name": "UserUnregistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "verifier", "type": "address" }],
+    "name": "VerifierAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "verifier", "type": "address" }],
+    "name": "VerifierRemoved",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "activationDelay",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_verifier", "type": "address" }],
+    "name": "addVerifier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_linkedAddress", "type": "address" }],
+    "name": "cancelAddressLinkingRequest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_admin", "type": "address" },
+      { "internalType": "uint256", "name": "_activationDelay", "type": "uint256" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "address", "name": "_verifier", "type": "address" }
+    ],
+    "name": "isUser",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_masterAddress", "type": "address" }],
+    "name": "linkAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "linkedAddresses",
+    "outputs": [
+      { "internalType": "uint64", "name": "activatesAt", "type": "uint64" },
+      { "internalType": "address", "name": "masterAddress", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "masterAddresses",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "pendingLinkAddresses",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_masterAddress", "type": "address" },
+      { "internalType": "bool", "name": "_isMasterLinked", "type": "bool" }
+    ],
+    "name": "registerMasterAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_verifier", "type": "address" }],
+    "name": "removeVerifier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [{ "internalType": "address", "name": "_linkedAddress", "type": "address" }],
+    "name": "requestAddressLinking",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_linkedAddress", "type": "address" }],
+    "name": "unlinkAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_masterAddress", "type": "address" },
+      { "internalType": "address", "name": "_verifier", "type": "address" }
+    ],
+    "name": "unregisterMasterAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_activationDelay", "type": "uint256" }],
+    "name": "updateActivationDelay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "verifiers",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

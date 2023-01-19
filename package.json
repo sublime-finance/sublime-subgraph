@@ -1,0 +1,28 @@
+{
+  "name": "sublime-subgraph",
+  "version": "0.1.0",
+  "scripts": {
+    "create-local": "graph create sublime-finance/sublime-subgraph --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy sublime-finance/sublime-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "create": "graph create sublime-finance/sublime-subgraph --node https://api.thegraph.com/deploy/",
+    "codegen": "graph codegen",
+    "build": "graph codegen && graph build",
+    "deploy": "graph deploy sublime-finance/sublime-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token ",
+    "prettier": "prettier --write .",
+    "graph": "graph"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.4.0"
+  },
+  "pre-commit": [
+    "prettier",
+    "codegen",
+    "build"
+  ],
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.26.0",
+    "@graphprotocol/graph-ts": "^0.24.1",
+    "abi-decoder-ts": "^3.0.1"
+  }
+}
